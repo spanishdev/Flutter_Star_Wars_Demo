@@ -6,11 +6,11 @@ import 'package:flutter_tutorial/model/characters.dart';
 /// This widget's height is based on the animation parameter, it varies
 /// from 0 to 128 as the animation varies from 0.0 to 1.0.
 class CharacterItem extends StatelessWidget {
-  Character _character;
 
-  CharacterItem(Character character) {
-    this._character = character;
-  }
+  Character _character;
+  VoidCallback onTap;
+
+  CharacterItem(this._character, this.onTap)
 
   @override
   Widget build(BuildContext context) {

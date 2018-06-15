@@ -62,7 +62,7 @@ class _ListPageState extends State<ListPage> {
         child: new ListView.builder(
           itemCount: _characters == null ? 0 : _characters.length,
           itemBuilder: (context,index){
-             return new CharacterItem(_characters[index]);
+             return new CharacterItem(_characters[index],onCharacterSelected(index));
           },
         ),
 
