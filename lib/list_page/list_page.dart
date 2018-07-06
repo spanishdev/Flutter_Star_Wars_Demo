@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_tutorial/list_page/CharacterItem.dart';
+import 'package:flutter_tutorial/characters/character_item.dart';
+import 'package:flutter_tutorial/characters/character_page.dart';
 import 'package:flutter_tutorial/model/characters.dart';
 import 'package:flutter_tutorial/model/star_wars_api.dart';
-import 'package:flutter_tutorial/model/sw_list_object.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
@@ -50,19 +50,19 @@ class _ListPageState extends State<ListPage> {
 
   onCharacterSelected(int index) {
     print("SELECTED: "+_characters[index].name);
+    Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new CharacterPage(_characters[index])));
   }
 
 
   @override
   Widget build(BuildContext context) {
+
     return new Scaffold(
-
       body: new Center(
-
         child: new ListView.builder(
           itemCount: _characters == null ? 0 : _characters.length,
           itemBuilder: (context,index){
-             return new CharacterItem(_characters[index],onCharacterSelected(index));
+             return new character_item(_characters[index],() => onCharacterSelected(index));
           },
         ),
 
@@ -75,4 +75,5 @@ class _ListPageState extends State<ListPage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
 }

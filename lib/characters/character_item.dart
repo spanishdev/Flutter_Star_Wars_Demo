@@ -5,19 +5,22 @@ import 'package:flutter_tutorial/model/characters.dart';
 /// the item's value. The text is displayed in bright green if selected is true.
 /// This widget's height is based on the animation parameter, it varies
 /// from 0 to 128 as the animation varies from 0.0 to 1.0.
-class CharacterItem extends StatelessWidget {
+class character_item extends StatelessWidget {
 
   Character _character;
-  VoidCallback onTap;
+  GestureTapCallback onTap;
 
-  CharacterItem(this._character, this.onTap)
+  character_item(this._character, this.onTap);
 
   @override
   Widget build(BuildContext context) {
-    return new Card(
-        child: new Padding(
-            padding: const EdgeInsets.all(35.0),
-            child: new Text(_character.name)
+    return new GestureDetector(
+        onTap: onTap,
+        child: new Card(
+            child: new Padding(
+                padding: const EdgeInsets.all(35.0),
+                child: new Text(_character.name)
+            )
         )
     );
   }
