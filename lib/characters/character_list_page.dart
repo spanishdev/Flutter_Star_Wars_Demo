@@ -8,27 +8,49 @@ import 'package:flutter_tutorial/model/star_wars_api.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
-class ListPage extends StatefulWidget {
-  ListPage() : super();
+class CharacterListPage extends StatefulWidget {
+  CharacterListPage() : super();
 
   @override
-  _ListPageState createState() => new _ListPageState();
+  _CharacterListPageState createState() => new _CharacterListPageState();
 }
 
-class _ListPageState extends State<ListPage> {
+class _CharacterListPageState extends State<CharacterListPage> {
 
   List<Character> _characters;
+  int page = 1;
+
+  ScrollController _scrollController;
+  bool _loading = false;
 
   @override
   void initState() {
     super.initState();
 
-    getCharacters();
+    _characters = new List<Character>();
+    getCharacters(page);
+
+    _scrollController = new ScrollController()..addListener(onBottomReached);
   }
 
-  Future<List<Character>> getCharacters() async {
+  @override
+  void dispose() {
+    _scrollController.removeListener(onBottomReached);
+    super.dispose();
+  }
+
+  onBottomReached() {
+    if(_scrollController.position.extentAfter < 500 && !_loading){
+      getCharacters(++page);
+    }
+  }
+
+  Future<List<Character>> getCharacters(int page) async {
+
+    _loading = true;
+
     var response = await http.get(
-      Uri.encodeFull(Endpoints.BASE_URL+"people/")
+      Uri.encodeFull(Endpoints.BASE_URL+"people?page=$page")
     );
 
     print(response.body);
@@ -36,20 +58,12 @@ class _ListPageState extends State<ListPage> {
     Map<String,dynamic> data = JSON.decode(response.body);
     var results = data['results'];
 
-    List<Character> characterList = new List<Character>();
+    results.forEach((Map map) =>  setState(() => _characters.add(new Character.fromMap(map))));
 
-    results.forEach((Map map) => characterList.add(new Character.fromMap(map)));
-
-    print(characterList[0].name);
-
-    setState(() => _characters = characterList);
-
-    return characterList;
-
+    _loading = false;
   }
 
   onCharacterSelected(int index) {
-    print("SELECTED: "+_characters[index].name);
     Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new CharacterPage(_characters[index])));
   }
 
@@ -60,6 +74,7 @@ class _ListPageState extends State<ListPage> {
     return new Scaffold(
       body: new Center(
         child: new ListView.builder(
+          controller: _scrollController,
           itemCount: _characters == null ? 0 : _characters.length,
           itemBuilder: (context,index){
              return new character_item(_characters[index],() => onCharacterSelected(index));
@@ -69,7 +84,7 @@ class _ListPageState extends State<ListPage> {
       ),
 
       floatingActionButton: new FloatingActionButton(
-        onPressed: getCharacters,
+        onPressed: () => getCharacters(page),
         tooltip: 'Increment',
         child: new Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.

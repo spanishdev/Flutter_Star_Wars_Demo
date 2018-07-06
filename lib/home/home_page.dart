@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tutorial/list_page/list_page.dart';
+import 'package:flutter_tutorial/characters/character_list_page.dart';
 import 'package:flutter_tutorial/list_page/nav_drawer_item.dart';
 
 final String PAGE_TITLE = "Main Page";
@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   _getSelectedScreen(NavDrawerItem selectedItem) {
     if(selectedItem == null) return null;
 
-    return new ListPage();
+    return new CharacterListPage();
   }
 
 

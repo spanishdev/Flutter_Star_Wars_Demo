@@ -19,7 +19,7 @@ class character_item extends StatelessWidget {
         child: new Card(
             child: new Padding(
                 padding: const EdgeInsets.all(35.0),
-                child: new Text(_character.name)
+                child: new Text(_character.name, style: new TextStyle(fontSize: 20.0))
             )
         )
     );
