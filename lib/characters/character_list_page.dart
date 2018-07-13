@@ -58,9 +58,14 @@ class _CharacterListPageState extends State<CharacterListPage> {
     Map<String,dynamic> data = JSON.decode(response.body);
     var results = data['results'];
 
-    results.forEach((Map map) =>  setState(() => _characters.add(new Character.fromMap(map))));
+    try{
+      results.forEach((Map map) =>  setState(() => _characters.add(new Character.fromMap(map))));
+    } catch(e) {
+      print(e.toString());
+    } finally {
+      _loading = false;
+    }
 
-    _loading = false;
   }
 
   onCharacterSelected(int index) {
@@ -75,9 +80,20 @@ class _CharacterListPageState extends State<CharacterListPage> {
       body: new Center(
         child: new ListView.builder(
           controller: _scrollController,
-          itemCount: _characters == null ? 0 : _characters.length,
+          itemCount: _characters == null ? 0 : _characters.length + 1,
           itemBuilder: (context,index){
-             return new character_item(_characters[index],() => onCharacterSelected(index));
+
+            if(index == _characters.length){
+              if(_loading) {
+                return new Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: const Center( child: const CircularProgressIndicator())
+                );
+              } else {
+                return new Container( height: 50.0);
+              }
+            }
+            else return new character_item(_characters[index],() => onCharacterSelected(index));
           },
         ),
 

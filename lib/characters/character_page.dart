@@ -41,6 +41,7 @@ class _CharacterPageState extends State<CharacterPage> {
             child: new Column(
               children: <Widget>[
                 generateRow("Gender", _character.gender),
+                generateRow("Birth Year", _character.birth_year),
                 generateRow("Eye Color", _character.eye_color),
                 generateRow("Hair Color", _character.hair_color),
                 generateRow("Skin Color", _character.skin_color),
